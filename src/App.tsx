@@ -1,45 +1,45 @@
-import React, { useState } from "react";
-import ClusterList from "./components/ClusterList";
-import Header from "./components/Header";
-import ClusterMap from "./components/ClusterMap";
+import React, { useState } from 'react'
+import ClusterList from './components/ClusterList'
+import Header from './components/Header'
+import ClusterMap from './components/ClusterMap'
 
-import { Radio } from "antd";
-import { clusters } from "./data/clusters";
-import { getClustersWeeklyUpdates } from "./helpers/clusters";
-import Chart from "chart.js";
-import ChartDataLabels from "chartjs-plugin-datalabels";
-import { Line } from "react-chartjs-2";
+import { Radio } from 'antd'
+import { clusters } from './data/clusters'
+import { getClustersWeeklyUpdates } from './helpers/clusters'
+import Chart from 'chart.js'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
+import { Line } from 'react-chartjs-2'
 
-Chart.plugins.register(ChartDataLabels);
+Chart.plugins.register(ChartDataLabels)
 
 const App = () => {
   const [order, setOrder] = useState(
-    "desc-updated-first" as "asc" | "desc" | "desc-updated-first"
-  );
-  const [view, setView] = useState("list" as "list" | "chart" | "map");
-  const [mapLang, setMapLang] = useState("en" as "en" | "cn");
+    'desc-updated-first' as 'asc' | 'desc' | 'desc-updated-first'
+  )
+  const [view, setView] = useState('list' as 'list' | 'chart' | 'map')
+  const [mapLang, setMapLang] = useState('en' as 'en' | 'cn')
 
-  const today = "2020-04-23";
+  const today = '2020-04-23'
   const chartConfigs = getClustersWeeklyUpdates(clusters, {
     today,
     count: 12,
     showTotal: true,
     log: false,
     stack: true,
-  });
+  })
 
   const canvasIds = {
-    list: "clusters",
-    chart: "chart",
-    map: "map",
-  };
+    list: 'clusters',
+    chart: 'chart',
+    map: 'map',
+  }
 
   const views = {
     list: () => (
       <div id="clusters-wrapper">
         <ClusterList
           clusters={clusters}
-          count={8000}
+          count={20000}
           order={order}
           today={today}
         />
@@ -47,36 +47,36 @@ const App = () => {
     ),
     chart: () => {
       // @ts-ignore
-      const chart = <Line {...chartConfigs} />;
-      return <div id="chart">{chart}</div>;
+      const chart = <Line {...chartConfigs} />
+      return <div id="chart">{chart}</div>
     },
     map: () => (
       <div id="map">
         <ClusterMap clusters={clusters} today={today} lang={mapLang} />
       </div>
     ),
-  };
+  }
 
   return (
     <div>
-      <Header canvasId={canvasIds[view]} disableDownload={view === "map"}>
+      <Header canvasId={canvasIds[view]} disableDownload={view === 'map'}>
         <Radio.Group
           defaultValue="list"
           style={{ marginRight: 16 }}
           onChange={(e) => {
-            setView(e.target.value);
+            setView(e.target.value)
           }}
         >
           <Radio.Button value="list">List</Radio.Button>
           <Radio.Button value="chart">Chart</Radio.Button>
           <Radio.Button value="map">Map</Radio.Button>
         </Radio.Group>
-        {view === "list" && (
+        {view === 'list' && (
           <Radio.Group
             defaultValue={order}
             value={order}
             onChange={(e) => {
-              setOrder(e.target.value);
+              setOrder(e.target.value)
             }}
           >
             <Radio.Button value="asc">Ascending</Radio.Button>
@@ -86,12 +86,12 @@ const App = () => {
             </Radio.Button>
           </Radio.Group>
         )}
-        {view === "map" && (
+        {view === 'map' && (
           <Radio.Group
             defaultValue={mapLang}
             value={mapLang}
             onChange={(e) => {
-              setMapLang(e.target.value);
+              setMapLang(e.target.value)
             }}
           >
             <Radio.Button value="en">EN</Radio.Button>
@@ -101,6 +101,6 @@ const App = () => {
       </Header>
       {views[view]()}
     </div>
-  );
-};
-export default App;
+  )
+}
+export default App

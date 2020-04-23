@@ -18,7 +18,7 @@ const ClusterMap: React.RefForwardingComponent<HTMLDivElement, Props> = (props, 
   useEffect(() => {
     const map = document.querySelector(`#${id}`)
     if (map) {
-      map.childNodes.forEach(n => map.removeChild(n))
+      map.innerHTML = ''
     }
     setTimeout(() => {
       genMap(id, {
