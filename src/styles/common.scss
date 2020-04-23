@@ -1,0 +1,27 @@
+body {
+    --color-danger: #f5222d;
+    --color-warning: #fa8c16;
+    --color-success: #52c41a;
+    --color-info: #888899;
+    --color-white: #fcfcfc;
+    --color-black: #222222;
+    --color-border: #cccccc;
+    --color-male: #1890ff;
+    --color-female: #f759ab;
+    --color-no-info: #fafafa;
+}
+
+$statuses: (danger, warning, success, info);
+
+$colors: (
+    danger: var(--color-danger),
+    warning: var(--color-warning),
+    success: var(--color-success),
+    info: var(--color-info),
+    white: var(--color-white),
+    black: var(--color-black),
+    border: var(--color-border),
+    male: var(--color-male),
+    female: var(--color-female),
+    no-info: var(--color-no-info),
+);

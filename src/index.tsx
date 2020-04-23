@@ -1,23 +1,8 @@
-import * as React from 'react';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-export const useMyHook = () => {
-  let [{
-    counter
-  }, setState] = React.useState<{
-    counter: number;
-  }>({
-    counter: 0
-  });
+import './index.scss'
+import 'antd/dist/antd.css';
+import App from './App'
 
-  React.useEffect(() => {
-    let interval = window.setInterval(() => {
-      counter++;
-      setState({counter})
-    }, 1000)
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, []);
-
-  return counter;
-};
+ReactDOM.render(<App />, document.getElementById('root'))

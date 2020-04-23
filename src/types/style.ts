@@ -1,0 +1,1 @@
+export type DisplayStatus = '' | 'info' | 'danger' | 'warning' | 'success'

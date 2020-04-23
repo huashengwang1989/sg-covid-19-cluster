@@ -2,7 +2,7 @@
   "name": "sg-covid",
   "version": "1.0.0",
   "description": "Data visualization for Singapore related COVID-19 cases",
-  "author": "huashengwang1989",
+  "author": "huasheng",
   "license": "MIT",
   "repository": "huashengwang1989/sg-covid",
   "main": "dist/index.js",
@@ -13,15 +13,34 @@
     "npm": ">=5"
   },
   "scripts": {
-    "test": "cross-env CI=1 react-scripts test --env=jsdom",
-    "test:watch": "react-scripts test --env=jsdom",
-    "build": "rollup -c",
-    "start": "rollup -c -w",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "prepare": "yarn run build",
     "predeploy": "cd example && yarn install && yarn run build",
     "deploy": "gh-pages -d example/build"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@ant-design/icons": "^4.0.5",
+    "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/free-solid-svg-icons": "^5.12.1",
+    "@fortawesome/react-fontawesome": "^0.1.8",
+    "@types/chart.js": "^2.9.19",
+    "@types/color": "^3.0.1",
+    "@types/mapbox-gl": "^1.9.0",
+    "@types/react-dom": "^16.9.5",
+    "antd": "^4.1.1",
+    "chart.js": "^2.9.3",
+    "chartjs-plugin-datalabels": "^0.7.0",
+    "circle-to-polygon": "^2.0.1",
+    "color": "^3.1.2",
+    "dayjs": "^1.8.24",
+    "html2canvas": "^1.0.0-rc.5",
+    "jshint": "^2.11.0",
+    "maki": "^2.1.0",
+    "mapbox-gl": "^1.9.1",
+    "node-sass": "^4.13.1",
+    "react-chartjs-2": "^2.9.0"
+  },
   "peerDependencies": {
     "react": "^16.9.0"
   },
@@ -34,6 +53,7 @@
     "cross-env": "^5.2.0",
     "gh-pages": "^2.0.1",
     "react": "^16.9.0",
+    "react-dom": "^16.12.0",
     "react-scripts": "^3.0.1",
     "react-test-renderer": "^16.9.0",
     "rollup": "^1.1.2",
@@ -43,6 +63,20 @@
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-typescript2": "^0.19.2",
     "rollup-plugin-url": "^2.1.0",
-    "typescript": "^3.2.4"
+    "tslint": "^6.1.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.7.5"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
