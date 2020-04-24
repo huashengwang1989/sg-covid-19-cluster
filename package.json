@@ -5,6 +5,7 @@
   "author": "huasheng",
   "license": "MIT",
   "repository": "huashengwang1989/sg-covid",
+  "homepage": "./",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
