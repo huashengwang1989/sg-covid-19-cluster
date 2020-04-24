@@ -19,10 +19,10 @@ const App = () => {
   const [view, setView] = useState('list' as 'list' | 'chart' | 'map')
   const [mapLang, setMapLang] = useState('en' as 'en' | 'cn')
 
-  const today = '2020-04-23'
+  const today = '2020-04-24'
   const chartConfigs = getClustersWeeklyUpdates(clusters, {
     today,
-    count: 12,
+    count: 17,
     showTotal: true,
     log: false,
     stack: true,

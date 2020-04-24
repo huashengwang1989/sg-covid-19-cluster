@@ -143,8 +143,8 @@ function genMap(
         : total < 1000
         ? 'huge'
         : 'exploded'
-
-    const color = colorsBySeverity[severity]
+    const isNew = cluster.updates?.[today] === total;
+    const color = isNew ? '#449944' : colorsBySeverity[severity]
     const [r, g, b] = Color(color).rgb().array()
     const colorWithAlpha = `rgba(${r}, ${g}, ${b}, ${opacity})`
     return {
@@ -161,9 +161,10 @@ function genMap(
         base_height: 0,
         opacity,
         color: colorWithAlpha,
-        labelColor: labelColorsByRecent[recent],
+        labelColor: isNew ? '#446633' : labelColorsByRecent[recent],
         fontSize: fontSizesBySeverity[severity],
         haloWidth: haloWidthsByRecent[recent],
+        isNew,
       },
       geometry: {
         coordinates: [coordinates],
@@ -179,10 +180,11 @@ function genMap(
         ? (g.properties.cnName || g.properties.short || g.properties.name) +
           ` (${g.properties.value})`
         : (g.properties.short || g.properties.name) + ` (${g.properties.value})`
+    const isNew = g.properties.isNew
     return {
       type: 'Feature' as 'Feature',
       properties: {
-        description: name,
+        description: isNew ? `[NEW] ${name}` : name,
         icon: 'barrier',
         opacity: g.properties.opacity,
         color: g.properties.labelColor,
