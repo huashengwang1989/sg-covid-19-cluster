@@ -7,8 +7,10 @@ import {
   UpCircleOutlined,
   WarningOutlined,
   AreaChartOutlined,
+  LineChartOutlined,
   PushpinOutlined,
   UnorderedListOutlined,
+  FundOutlined,
 } from '@ant-design/icons'
 
 import { Radio } from 'antd'
@@ -27,14 +29,17 @@ const App = () => {
   const [view, setView] = useState('list' as 'list' | 'chart' | 'map')
   const [mapLang, setMapLang] = useState('en' as 'en' | 'cn')
 
+  const [chartScale, setChartScale] = useState('linear' as 'linear' | 'log')
+  const [chartFmt, setChartFmt] = useState('stack' as 'stack' | 'line')
+
   const today = '2020-04-25'
 
   const chartConfigs = genClustersChart(clusters, {
     today,
     count: 17,
     showTotal: true,
-    log: false,
-    stack: true,
+    log: chartScale === 'log',
+    stack: chartFmt === 'stack',
   })
 
   const canvasIds = {
@@ -125,6 +130,32 @@ const App = () => {
               <Radio.Button value="en">EN</Radio.Button>
               <Radio.Button value="cn">CN</Radio.Button>
             </Radio.Group>
+          )}
+          {view === 'chart' && (
+            <>
+              <Radio.Group
+                size="small"
+                defaultValue={chartFmt}
+                value={chartFmt}
+                onChange={(e) => {
+                  setChartFmt(e.target.value)
+                }}
+              >
+                <Radio.Button value="linear"><LineChartOutlined /></Radio.Button>
+                <Radio.Button value="stack"><AreaChartOutlined /></Radio.Button>
+              </Radio.Group>
+              <Radio.Group
+              size="small"
+              defaultValue={chartScale}
+              value={chartScale}
+              onChange={(e) => {
+                setChartScale(e.target.value)
+              }}
+            >
+              <Radio.Button value="linear"><FundOutlined /></Radio.Button>
+              <Radio.Button value="log">lg</Radio.Button>
+            </Radio.Group>
+            </>
           )}
         </div>
       </Header>
