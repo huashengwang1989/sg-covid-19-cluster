@@ -1,4 +1,6 @@
 body {
+    --color-theme: #ed2939;
+    --color-header: #ececec;
     --color-danger: #f5222d;
     --color-warning: #fa8c16;
     --color-success: #52c41a;
@@ -14,6 +16,8 @@ body {
 $statuses: (danger, warning, success, info);
 
 $colors: (
+    theme: var(--color-theme),
+    header: var(--color-header),
     danger: var(--color-danger),
     warning: var(--color-warning),
     success: var(--color-success),

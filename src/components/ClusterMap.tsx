@@ -1,16 +1,17 @@
 import React, {useEffect} from 'react'
+import ErrorBoundary from './ErrorBoundary'
 import { genMap } from '../helpers/map'
 import { Cluster } from '../types/cluster'
 interface Props {
-    id?: string
+    id: string
     clusters: Cluster[]
     today: string
     lang: 'en' | 'cn'
 }
 
-const ClusterMap: React.RefForwardingComponent<HTMLDivElement, Props> = (props, ref) => {
+const ClusterMap: React.FC<Props> = (props) => {
   const {
-    id = 'map',
+    id,
     clusters,
     today,
     lang,
@@ -27,7 +28,11 @@ const ClusterMap: React.RefForwardingComponent<HTMLDivElement, Props> = (props, 
         lang,
       })
     })
+    return () => {
+      const m = document.querySelector(`#${id}`)
+      console.log('unmount', m)
+    }
   }, [id, clusters, today, lang])
-  return <div id={id} ref={ref}/>
+  return <ErrorBoundary><div id={id}/></ErrorBoundary>
 }
-export default React.forwardRef(ClusterMap)
+export default ClusterMap

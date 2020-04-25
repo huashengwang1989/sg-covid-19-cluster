@@ -6,7 +6,7 @@ import { Cluster } from '../types/cluster'
 
 import { prefixZero, groupWithConsecutivesConmined } from '../helpers/utils'
 
-import '../styles/components/ClusterLinkage.scss'
+import '../styles/components/ClusterList.scss'
 interface Props {
   clusters: Cluster[]
   count: number
@@ -14,7 +14,7 @@ interface Props {
   order: 'asc' | 'desc' | 'desc-updated-first'
 }
 
-const ClusterLinkage: React.RefForwardingComponent<HTMLDivElement, Props> = (
+const ClusterList: React.RefForwardingComponent<HTMLDivElement, Props> = (
   props,
   ref
 ) => {
@@ -33,18 +33,21 @@ const ClusterLinkage: React.RefForwardingComponent<HTMLDivElement, Props> = (
       ref={ref}
     >
       <div className="update-line">
-        <div className="title">Singapore COVID-19 Clusters 新加坡感染群</div>
+        <div className="title">
+          {'Singapore COVID-19 Clusters\n新加坡感染群'}
+        </div>
         <div className="flex-spacer"></div>
-        <div className="update-date">Updated: {today}</div>
+        <div className="update-append">
+          <span>Updated: </span>
+          <span className="timestamp">{today}</span>
+        </div>
       </div>
       <div className="update-line">
         <div className="title"></div>
         <div className="flex-spacer"></div>
-        <div className="update-date">
+        <div className="update-append">
           客工宿舍: {dormClusters.length} 间{' '}
-          <span style={{ color: 'red' }}>
-            *最新通告无感染者具体信息，故感染者和LINK的数据截止于4/19)
-          </span>
+          <span className="update-note">*4/19后无感染者具体信息</span>
         </div>
       </div>
       <div className="clusters-wrapper">
@@ -167,29 +170,35 @@ const ClusterLinkage: React.RefForwardingComponent<HTMLDivElement, Props> = (
                       </p>
                     )
                   })}
-                <div className="main-cluster-people">
-                  {groupWithConsecutivesConmined(cluster.people, {
-                    combineWithLengthSameOrMoreThan: 4,
-                    consecutiveSpaceOccupation: 2,
-                    numberPerGroup: 15,
-                  }).map((grp, idx, arr) => {
-                    return (
-                      <p className="cluster-people-row" key={idx}>
-                        {grp
-                          .map((n) =>
-                            typeof n === 'number'
-                              ? prefixZero(n)
-                              : n === null
-                              ? 'x'
-                              : [n[0], n[n.length - 1]]
-                                  .map((num) => prefixZero(num))
-                                  .join('~')
-                          )
-                          .join(' ') + (idx < arr.length - 1 ? '' : '')}
-                      </p>
-                    )
-                  })}
-                </div>
+                {cluster.people.length > 0 && (
+                  <div className="main-cluster-people-wrapper">
+                    <div className="side-spacer" />
+                    <div className="main-cluster-people">
+                      {groupWithConsecutivesConmined(cluster.people, {
+                        combineWithLengthSameOrMoreThan: 4,
+                        consecutiveSpaceOccupation: 2,
+                        numberPerGroup: 10,
+                      }).map((grp, idx, arr) => {
+                        return (
+                          <p className="cluster-people-row" key={idx}>
+                            {grp
+                              .map((n) =>
+                                typeof n === 'number'
+                                  ? prefixZero(n)
+                                  : n === null
+                                  ? 'x'
+                                  : [n[0], n[n.length - 1]]
+                                      .map((num) => prefixZero(num))
+                                      .join('~')
+                              )
+                              .join(' ') + (idx < arr.length - 1 ? '' : '')}
+                          </p>
+                        )
+                      })}
+                    </div>
+                    <div className="side-spacer" />
+                  </div>
+                )}
               </div>
             )
           })}
@@ -198,4 +207,4 @@ const ClusterLinkage: React.RefForwardingComponent<HTMLDivElement, Props> = (
   )
 }
 
-export default React.forwardRef(ClusterLinkage)
+export default React.forwardRef(ClusterList)

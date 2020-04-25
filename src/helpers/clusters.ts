@@ -71,9 +71,10 @@ function getClusterLinkage(
   return getLinksByCluster(multiLinkedClusters, casesInMultiLinkedClusters)
 }
 
-function getClustersWeeklyUpdates(
+function genClustersChart(
   clusters: Cluster[],
   options: {
+    displayLegend?: boolean
     today: string
     count: number
     showTotal?: boolean
@@ -81,7 +82,7 @@ function getClustersWeeklyUpdates(
     log?: boolean
   }
 ) {
-  const { today, count, showTotal, stack, log } = options
+  const { displayLegend = false, today, count, showTotal, stack, log } = options
   const todayDate = dayjs(today, {
     format: 'YYYY-MM-DD',
   })
@@ -181,13 +182,16 @@ function getClustersWeeklyUpdates(
         : datasets,
     },
     options: {
+      legend: {
+        display: displayLegend,
+      },
       maintainAspectRatio: false,
       layout: {
         padding: {
           left: 10,
           right: 150,
-          top: 0,
-          bottom: 0,
+          top: 10,
+          bottom: 6,
         },
       },
       tooltips: {
@@ -208,6 +212,17 @@ function getClustersWeeklyUpdates(
         },
       },
       scales: {
+        xAxes: [
+          {
+            ticks: {
+              // Include a dollar sign in the ticks
+              callback: function (value) {
+                const splits = value.split('-')
+                return `${Number(splits[1])}/${splits[2]}`
+              },
+            },
+          },
+        ],
         yAxes: [
           {
             id: 'first-y-axis',
@@ -228,4 +243,4 @@ function getClustersWeeklyUpdates(
   }
 }
 
-export { getClusterLinkage, getClustersWeeklyUpdates }
+export { getClusterLinkage, genClustersChart }

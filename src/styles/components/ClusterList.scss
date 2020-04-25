@@ -1,0 +1,152 @@
+.cluster-linkage {
+  padding: 3px;
+  .update-line {
+    padding: 4px 8px;
+    display: flex;
+    color: #666;
+    white-space: pre-wrap;
+    .title {
+      font-weight: 700;
+    }
+    .flex-spacer {
+      flex: 100 1 10px;
+    }
+    .update-append {
+      font-size: 0.9em;
+      color: #999;
+      .timestamp {
+        display: inline-block;
+      }
+      .update-note {
+        display: inline-block;
+        font-size: 0.8em;
+        color: red;
+      }
+    }
+  }
+  .clusters-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    background: #f1f1f1;
+    .cluster {
+      margin: 4px;
+      width: 280px;
+      max-width: 100%;
+      background: white;
+      padding: 4px;
+      flex: 1 1 280px;
+      h4.title-cluster {
+        margin: 0 0 4px 0;
+        font-weight: 700;
+        .main-name {
+          .count {
+            font-weight: 400;
+            color: #444f;
+            margin-left: 6px;
+          }
+          .new-tag,
+          .update-tag {
+            font-size: 0.8em;
+            margin-left: 6px;
+            padding: 2px 4px;
+            line-height: 1.2em;
+            border-radius: 2px;
+            color: #f1f1f1;
+            min-width: 18px;
+            text-align: center;
+            display: inline-block;
+            background: mix(red, white, 60%);
+          }
+        }
+        .cn-name {
+          color: #666;
+          font-size: 0.8em;
+        }
+      }
+      .cluster-address {
+        margin: 2px 0 6px 0;
+        color: #999;
+        font-size: 0.8em;
+      }
+      .import-tag-line {
+        font-size: 0.9em;
+        margin: 2px 0;
+        .import-tag {
+          color: #8833ff;
+          font-size: 0.75em;
+        }
+        .import-origin {
+          color: #666;
+          font-family: monospace;
+          margin-left: 6px;
+        }
+        .import-note {
+          color: #888;
+          margin-left: 8px;
+          font-size: 0.75em;
+          &:before {
+            content: '* ';
+          }
+        }
+      }
+      .source-cluster-tag-line {
+        font-size: 0.9em;
+        margin: 2px 0;
+        .source-tag {
+          color: #8833ff;
+          font-size: 0.75em;
+        }
+        .import-origin {
+          color: #999;
+          font-size: 0.85em;
+          margin-left: 6px;
+        }
+        .import-note {
+          color: #888;
+          margin-left: 8px;
+          font-size: 0.75em;
+          &:before {
+            content: '* ';
+          }
+        }
+      }
+      .linked-cluster {
+        font-size: 0.9em;
+        margin: 2px 0;
+        .cluster-name {
+          color: #ff3377;
+          font-size: 0.75em;
+        }
+        .cluster-people {
+          color: #666;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 10px;
+        }
+        &::before {
+          color: #ffb3d9;
+          content: 'LINK: ';
+          font-size: 0.75em;
+        }
+      }
+      .main-cluster-people-wrapper {
+        display: flex;
+        .side-spacer {
+          flex: 100 1 auto;
+          min-width: 0;
+        }
+        .main-cluster-people {
+          flex: 0 1 auto;
+          margin-top: 8px;
+          color: #666;
+          font-family: 'Share Tech Mono', monospace;
+          line-height: 1em;
+          font-size: 10px;
+          .cluster-people-row {
+            margin: 0;
+            min-width: 265px;
+          }
+        }
+      }
+    }
+  }
+}

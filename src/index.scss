@@ -6,10 +6,13 @@ body {
 
 #map{
   height: 1200px;
-  max-height: 90vh;
+  max-height: calc(100vh - 40px);
+  #mapbox-map{
+    height: 100%;
+  }
 }
 
 #chart {
   height: 1200px;
-  max-height: 90vh;
+  max-height: calc(100vh - 40px);
 }

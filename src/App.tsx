@@ -2,10 +2,18 @@ import React, { useState } from 'react'
 import ClusterList from './components/ClusterList'
 import Header from './components/Header'
 import ClusterMap from './components/ClusterMap'
+import {
+  DownCircleOutlined,
+  UpCircleOutlined,
+  WarningOutlined,
+  AreaChartOutlined,
+  PushpinOutlined,
+  UnorderedListOutlined,
+} from '@ant-design/icons'
 
 import { Radio } from 'antd'
 import { clusters } from './data/clusters'
-import { getClustersWeeklyUpdates } from './helpers/clusters'
+import { genClustersChart } from './helpers/clusters'
 import Chart from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { Line } from 'react-chartjs-2'
@@ -19,8 +27,9 @@ const App = () => {
   const [view, setView] = useState('list' as 'list' | 'chart' | 'map')
   const [mapLang, setMapLang] = useState('en' as 'en' | 'cn')
 
-  const today = '2020-04-24'
-  const chartConfigs = getClustersWeeklyUpdates(clusters, {
+  const today = '2020-04-25'
+
+  const chartConfigs = genClustersChart(clusters, {
     today,
     count: 17,
     showTotal: true,
@@ -52,7 +61,12 @@ const App = () => {
     },
     map: () => (
       <div id="map">
-        <ClusterMap clusters={clusters} today={today} lang={mapLang} />
+        <ClusterMap
+          id="mapbox-map"
+          clusters={clusters}
+          today={today}
+          lang={mapLang}
+        />
       </div>
     ),
   }
@@ -60,44 +74,59 @@ const App = () => {
   return (
     <div>
       <Header canvasId={canvasIds[view]} disableDownload={view === 'map'}>
-        <Radio.Group
-          defaultValue="list"
-          style={{ marginRight: 16 }}
-          onChange={(e) => {
-            setView(e.target.value)
-          }}
-        >
-          <Radio.Button value="list">List</Radio.Button>
-          <Radio.Button value="chart">Chart</Radio.Button>
-          <Radio.Button value="map">Map</Radio.Button>
-        </Radio.Group>
-        {view === 'list' && (
+        <div className="header-toggles">
           <Radio.Group
-            defaultValue={order}
-            value={order}
+            size="small"
+            defaultValue="list"
+            style={{ marginRight: 16 }}
             onChange={(e) => {
-              setOrder(e.target.value)
+              setView(e.target.value)
             }}
           >
-            <Radio.Button value="asc">Ascending</Radio.Button>
-            <Radio.Button value="desc">Descending</Radio.Button>
-            <Radio.Button value="desc-updated-first">
-              Updated First
+            <Radio.Button value="list">
+              <UnorderedListOutlined />
+            </Radio.Button>
+            <Radio.Button value="chart">
+              <AreaChartOutlined />
+            </Radio.Button>
+            <Radio.Button value="map">
+              <PushpinOutlined />
             </Radio.Button>
           </Radio.Group>
-        )}
-        {view === 'map' && (
-          <Radio.Group
-            defaultValue={mapLang}
-            value={mapLang}
-            onChange={(e) => {
-              setMapLang(e.target.value)
-            }}
-          >
-            <Radio.Button value="en">EN</Radio.Button>
-            <Radio.Button value="cn">CN</Radio.Button>
-          </Radio.Group>
-        )}
+          {view === 'list' && (
+            <Radio.Group
+              size="small"
+              defaultValue={order}
+              value={order}
+              onChange={(e) => {
+                setOrder(e.target.value)
+              }}
+            >
+              <Radio.Button value="asc">
+                <UpCircleOutlined />
+              </Radio.Button>
+              <Radio.Button value="desc">
+                <DownCircleOutlined />
+              </Radio.Button>
+              <Radio.Button value="desc-updated-first">
+                <WarningOutlined />
+              </Radio.Button>
+            </Radio.Group>
+          )}
+          {view === 'map' && (
+            <Radio.Group
+              size="small"
+              defaultValue={mapLang}
+              value={mapLang}
+              onChange={(e) => {
+                setMapLang(e.target.value)
+              }}
+            >
+              <Radio.Button value="en">EN</Radio.Button>
+              <Radio.Button value="cn">CN</Radio.Button>
+            </Radio.Group>
+          )}
+        </div>
       </Header>
       {views[view]()}
     </div>
