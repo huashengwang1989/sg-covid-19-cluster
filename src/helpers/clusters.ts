@@ -197,9 +197,6 @@ function genClustersChart(
       legend: {
         display: displayLegend,
         align: 'start',
-        padding: {
-          right: sideLabelPosition === 'right' ? -150 : 10,
-        },
       },
       maintainAspectRatio: false,
       layout: {
