@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ClusterList from './components/ClusterList'
 import Header from './components/Header'
 import ClusterMap from './components/ClusterMap'
@@ -11,9 +11,11 @@ import {
   PushpinOutlined,
   UnorderedListOutlined,
   FundOutlined,
+  InfoCircleOutlined,
+  TableOutlined,
 } from '@ant-design/icons'
 
-import { Radio } from 'antd'
+import { Radio, Switch } from 'antd'
 import { clusters } from './data/clusters'
 import { genClustersChart } from './helpers/clusters'
 import Chart from 'chart.js'
@@ -22,24 +24,36 @@ import { Line } from 'react-chartjs-2'
 
 Chart.plugins.register(ChartDataLabels)
 
+
 const App = () => {
   const [order, setOrder] = useState(
     'desc-updated-first' as 'asc' | 'desc' | 'desc-updated-first'
   )
   const [view, setView] = useState('list' as 'list' | 'chart' | 'map')
-  const [mapLang, setMapLang] = useState('en' as 'en' | 'cn')
+  const [lang, setLang] = useState('en' as 'en' | 'cn')
+  
+  const [winWidh, setWinWidth] = useState(window.innerWidth)
+  const [winHeight, setWinHeight] = useState(window.innerHeight)
+
+  const legendDisplayThreshold = 1112 * 834 // iPad Pro 10.5
+
+  const today = '2020-04-26'
 
   const [chartScale, setChartScale] = useState('linear' as 'linear' | 'log')
   const [chartFmt, setChartFmt] = useState('stack' as 'stack' | 'line')
+  const [chartLabelDisplayed, setChartLabelDisplayed] = useState(true)
+  const [chartLegendDisplayed, setChartLegendDisplayed] = useState(true)
+  const [chatLegendDisplayApplicable, setChartLegendDisplayApplicable] = useState(winWidh * winHeight >= legendDisplayThreshold)
 
-  const today = '2020-04-25'
-
+  
   const chartConfigs = genClustersChart(clusters, {
     today,
     count: 17,
     showTotal: true,
     log: chartScale === 'log',
     stack: chartFmt === 'stack',
+    sideLabelPosition: !chartLabelDisplayed ? 'off' : winWidh >= 768 ? 'right' : 'left',
+    displayLegend: chartLegendDisplayed && chatLegendDisplayApplicable
   })
 
   const canvasIds = {
@@ -47,6 +61,19 @@ const App = () => {
     chart: 'chart',
     map: 'map',
   }
+
+  useEffect(() => {
+    function handleResize() {
+      setWinWidth(window.innerWidth)
+      setWinHeight(window.innerHeight)
+      const isChartLegendApplicable = window.innerWidth * window.innerHeight >= legendDisplayThreshold
+      setChartLegendDisplayApplicable(isChartLegendApplicable)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const views = {
     list: () => (
@@ -70,7 +97,7 @@ const App = () => {
           id="mapbox-map"
           clusters={clusters}
           today={today}
-          lang={mapLang}
+          lang={lang}
         />
       </div>
     ),
@@ -83,7 +110,7 @@ const App = () => {
           <Radio.Group
             size="small"
             defaultValue="list"
-            style={{ marginRight: 16 }}
+            style={{ marginRight: 8 }}
             onChange={(e) => {
               setView(e.target.value)
             }}
@@ -121,14 +148,14 @@ const App = () => {
           {view === 'map' && (
             <Radio.Group
               size="small"
-              defaultValue={mapLang}
-              value={mapLang}
+              defaultValue={lang}
+              value={lang}
               onChange={(e) => {
-                setMapLang(e.target.value)
+                setLang(e.target.value)
               }}
             >
               <Radio.Button value="en">EN</Radio.Button>
-              <Radio.Button value="cn">CN</Radio.Button>
+              <Radio.Button value="cn">中</Radio.Button>
             </Radio.Group>
           )}
           {view === 'chart' && (
@@ -137,6 +164,7 @@ const App = () => {
                 size="small"
                 defaultValue={chartFmt}
                 value={chartFmt}
+                style={{ marginRight: 8 }}
                 onChange={(e) => {
                   setChartFmt(e.target.value)
                 }}
@@ -147,6 +175,7 @@ const App = () => {
               <Radio.Group
               size="small"
               defaultValue={chartScale}
+              style={{ marginRight: 8 }}
               value={chartScale}
               onChange={(e) => {
                 setChartScale(e.target.value)
@@ -155,6 +184,21 @@ const App = () => {
               <Radio.Button value="linear"><FundOutlined /></Radio.Button>
               <Radio.Button value="log">lg</Radio.Button>
             </Radio.Group>
+            { chatLegendDisplayApplicable &&
+              <Switch
+                checkedChildren={<TableOutlined />}
+                unCheckedChildren={<TableOutlined />}
+                style={{ marginRight: 8}}
+                defaultChecked={chartLegendDisplayed}
+                onChange={bool => {setChartLegendDisplayed(bool)}}
+              />
+            }
+            <Switch
+                checkedChildren={<InfoCircleOutlined />}
+                unCheckedChildren={<InfoCircleOutlined />}
+                defaultChecked={chartLabelDisplayed}
+                onChange={bool => {setChartLabelDisplayed(bool)}}
+              />
             </>
           )}
         </div>

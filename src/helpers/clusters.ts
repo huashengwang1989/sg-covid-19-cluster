@@ -71,6 +71,7 @@ function getClusterLinkage(
   return getLinksByCluster(multiLinkedClusters, casesInMultiLinkedClusters)
 }
 
+// Will be shift to Chart component
 function genClustersChart(
   clusters: Cluster[],
   options: {
@@ -78,11 +79,22 @@ function genClustersChart(
     today: string
     count: number
     showTotal?: boolean
+    sideLabelPosition?: 'left' | 'right' | 'off'
+    sideLabelIsDisplayedWhenAbove?: number
     stack?: boolean
     log?: boolean
   }
 ) {
-  const { displayLegend = false, today, count, showTotal, stack, log } = options
+  const {
+    displayLegend = false,
+    today,
+    count,
+    showTotal,
+    sideLabelPosition = 'right',
+    sideLabelIsDisplayedWhenAbove = 200,
+    stack,
+    log,
+  } = options
   const todayDate = dayjs(today, {
     format: 'YYYY-MM-DD',
   })
@@ -126,7 +138,7 @@ function genClustersChart(
       fill: true,
       datalabels: {
         labels:
-          (cluster.total ?? cluster.people.length) > 150
+          (cluster.total ?? cluster.people.length) >= sideLabelIsDisplayedWhenAbove
             ? undefined
             : {
                 title: null,
@@ -161,7 +173,7 @@ function genClustersChart(
   return {
     data: {
       labels: dateKeys,
-      datasets: stack
+      datasets: stack && !log
         ? [
             {
               yAxisID: 'first-y-axis',
@@ -184,12 +196,16 @@ function genClustersChart(
     options: {
       legend: {
         display: displayLegend,
+        align: 'start',
+        padding: {
+          right: sideLabelPosition === 'right' ? -150 : 10,
+        },
       },
       maintainAspectRatio: false,
       layout: {
         padding: {
-          left: 10,
-          right: 150,
+          left: 6,
+          right: sideLabelPosition === 'right' ? 150 : 10,
           top: 10,
           bottom: 6,
         },
@@ -198,8 +214,11 @@ function genClustersChart(
         intersect: false,
       },
       plugins: {
-        datalabels: {
-          align: 'right',
+        datalabels: sideLabelPosition === 'off'
+        ? {
+          display: () => false,
+        } : {
+          align: sideLabelPosition,
           anchor: 'center',
           offset: 6,
           color: '#fff',
