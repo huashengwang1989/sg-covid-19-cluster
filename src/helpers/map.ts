@@ -9,6 +9,7 @@ interface GeodataFeatureProperties {
   short?: string
   cnName?: string
   value: number
+  todayUpdateNum: number
   severity: Severity
   recent: Recent
   geopoint: number[]
@@ -64,12 +65,12 @@ const severities: Severity[] = [
   'exploded',
 ]
 const colorsBySeverity: Record<Severity, string> = {
-  light: '#F5DA81',
+  light: '#FFBF00',
   mild: '#FF8000',
   medium: '#FE2E2E',
-  severe: '#B40404',
-  dangerous: '#380B61',
-  huge: '#220A29',
+  severe: '#8A0829',
+  dangerous: '#8A0868',
+  huge: '#3B0B2E',
   exploded: '#000',
 }
 
@@ -94,10 +95,10 @@ const haloWidthsByRecent: Record<Recent, number> = {
 function getLabelColorsByRecent(labelColor: string): Record<Recent, string> {
   return {
     recent: labelColor,
-    week: Color(labelColor).whiten(25).hex(),
-    fortnight: Color(labelColor).whiten(35).hex(),
+    week: Color(labelColor).whiten(.15).hex(),
+    fortnight: Color(labelColor).whiten(.25).hex(),
     month: '#a77',
-    far: '#aaa',
+    far: '#a77',
   }
 }
 
@@ -194,6 +195,7 @@ function genMap(
           short: cluster.short,
           cnName: cluster.cnName,
           value: total,
+          todayUpdateNum,
           severity,
           recent,
           geopoint: cluster.geopoints?.[0] || [],
@@ -228,7 +230,7 @@ function genMap(
         properties: {
           ...geoData.properties,
           height: heightScale(total),
-          color: Color(newColor).mix(Color(color), .5).hex(),
+          color: Color(newColor).mix(Color(color), pitch ? .35 : .5).hex(),
         },
         geometry: {
           ...geoData.geometry,
@@ -241,16 +243,16 @@ function genMap(
 
   const geoLabelFeatures = geodataFeatures.map((gs) => {
     const g = gs[0]
-    const name =
-      lang === 'cn'
-        ? (g.properties.cnName || g.properties.short || g.properties.name) +
-          ` (${g.properties.value})`
-        : (g.properties.short || g.properties.name) + ` (${g.properties.value})`
-    const isNew = g.properties.isNew
+    const {isNew, todayUpdateNum, value, name, cnName, short } = g.properties
+    const nameDisplay = lang === 'cn'
+      ? (cnName || short || name)
+      : (short || name)
+    const valueDisplay = isNew || !todayUpdateNum ? `${value}` : `${value}/+${todayUpdateNum}`
+    const label = `${nameDisplay} (${valueDisplay})`
     return {
       type: 'Feature' as 'Feature',
       properties: {
-        description: isNew ? `[NEW] ${name}` : name,
+        description: isNew ? `[NEW] ${label}` : label,
         icon: 'barrier',
         severity: g.properties.severity,
         opacity: g.properties.opacity,
