@@ -24,25 +24,80 @@ import { Line } from 'react-chartjs-2'
 
 Chart.plugins.register(ChartDataLabels)
 
+function lsBool(val: string | null) {
+  if (!val) {
+    return undefined
+  }
+  return val === 'on'
+}
+
 const App = () => {
-  const [order, setOrder] = useState(
-    'desc-updated-first' as 'asc' | 'desc' | 'desc-updated-first'
+  const [view, setView] = useState(
+    (localStorage.getItem('sgcovid.view') || 'list') as 'list' | 'chart' | 'map'
   )
-  const [view, setView] = useState('list' as 'list' | 'chart' | 'map')
-  const [lang, setLang] = useState('en' as 'en' | 'cn')
+  const [lang, setLang] = useState(
+    (localStorage.getItem('sgcovid.lang') || 'en') as 'en' | 'cn'
+  )
 
   const [winWidh, setWinWidth] = useState(window.innerWidth)
   const [winHeight, setWinHeight] = useState(window.innerHeight)
 
   const legendDisplayThreshold = 1112 * 834 // iPad Pro 10.5
 
-  const today = '2020-04-26'
+  const today = '2020-04-27'
 
-  const [chartScale, setChartScale] = useState('linear' as 'linear' | 'log')
-  const [chartFmt, setChartFmt] = useState('stack' as 'stack' | 'line')
-  const [chartLabelDisplayed, setChartLabelDisplayed] = useState(true)
-  const [chartLegendDisplayed, setChartLegendDisplayed] = useState(true)
-  const [isMapPitched, setIsMapPitched] = useState(false)
+  const [chartScale, setChartScale] = useState(
+    (localStorage.getItem('sgcovid.chart.scale') || 'linear') as
+      | 'linear'
+      | 'log'
+  )
+  const [order, setOrder] = useState(
+    (localStorage.getItem('sgcovid.chart.order') || 'desc-updated-first') as 'asc' | 'desc' | 'desc-updated-first'
+  )
+  const [chartFmt, setChartFmt] = useState(
+    (localStorage.getItem('sgcovid.chart.mode') || 'stack') as 'stack' | 'line'
+  )
+  const [chartLabelDisplayed, setChartLabelDisplayed] = useState(
+    lsBool(localStorage.getItem('sgcovid.chart.label')) ?? true
+  )
+  const [chartLegendDisplayed, setChartLegendDisplayed] = useState(
+    lsBool(localStorage.getItem('sgcovid.chart.legend')) ?? true
+  )
+  const [isMapPitched, setIsMapPitched] = useState(
+    lsBool(localStorage.getItem('sgcovid.map.pitch')) ?? false
+  )
+
+  useEffect(() => {
+    localStorage.setItem('sgcovid.view', view)
+  }, [view])
+  useEffect(() => {
+    localStorage.setItem('sgcovid.lang', view)
+  }, [lang])
+  useEffect(() => {
+    localStorage.setItem('sgcovid.chart.order', order)
+  }, [order])
+  useEffect(() => {
+    localStorage.setItem('sgcovid.chart.scale', chartScale)
+  }, [chartScale])
+  useEffect(() => {
+    localStorage.setItem('sgcovid.chart.mode', chartFmt)
+  }, [chartFmt])
+  useEffect(() => {
+    localStorage.setItem(
+      'sgcovid.chart.label',
+      chartLabelDisplayed ? 'on' : 'off'
+    )
+  }, [chartLabelDisplayed])
+  useEffect(() => {
+    localStorage.setItem(
+      'sgcovid.chart.legend',
+      chartLegendDisplayed ? 'on' : 'off'
+    )
+  }, [chartLegendDisplayed])
+  useEffect(() => {
+    localStorage.setItem('sgcovid.map.pitch', isMapPitched ? 'on' : 'off')
+  }, [isMapPitched])
+
   const [
     chatLegendDisplayApplicable,
     setChartLegendDisplayApplicable,
@@ -117,7 +172,7 @@ const App = () => {
         <div className="header-toggles">
           <Radio.Group
             size="small"
-            defaultValue="list"
+            defaultValue={view}
             style={{ marginRight: 8 }}
             onChange={(e) => {
               setView(e.target.value)
@@ -171,7 +226,9 @@ const App = () => {
                 checkedChildren="3D"
                 unCheckedChildren="3D"
                 defaultChecked={isMapPitched}
-                onChange={bool => {setIsMapPitched(bool)}}
+                onChange={(bool) => {
+                  setIsMapPitched(bool)
+                }}
               />
             </>
           )}
