@@ -71,7 +71,7 @@ const App = () => {
     localStorage.setItem('sgcovid.view', view)
   }, [view])
   useEffect(() => {
-    localStorage.setItem('sgcovid.lang', view)
+    localStorage.setItem('sgcovid.lang', lang)
   }, [lang])
   useEffect(() => {
     localStorage.setItem('sgcovid.chart.order', order)
