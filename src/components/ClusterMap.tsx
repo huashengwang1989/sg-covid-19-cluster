@@ -4,6 +4,7 @@ import { genMap } from '../helpers/map'
 import { Cluster } from '../types/cluster'
 interface Props {
     id: string
+    pitch: boolean,
     clusters: Cluster[]
     today: string
     lang: 'en' | 'cn'
@@ -13,6 +14,7 @@ const ClusterMap: React.FC<Props> = (props) => {
   const {
     id,
     clusters,
+    pitch,
     today,
     lang,
   } = props
@@ -24,6 +26,7 @@ const ClusterMap: React.FC<Props> = (props) => {
     setTimeout(() => {
       genMap(id, {
         clusters,
+        pitch,
         today,
         lang,
       })
@@ -32,7 +35,7 @@ const ClusterMap: React.FC<Props> = (props) => {
       const m = document.querySelector(`#${id}`)
       console.log('unmount', m)
     }
-  }, [id, clusters, today, lang])
+  }, [id, clusters, today, lang, pitch])
   return <ErrorBoundary><div id={id}/></ErrorBoundary>
 }
 export default ClusterMap

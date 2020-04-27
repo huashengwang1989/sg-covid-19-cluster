@@ -24,14 +24,13 @@ import { Line } from 'react-chartjs-2'
 
 Chart.plugins.register(ChartDataLabels)
 
-
 const App = () => {
   const [order, setOrder] = useState(
     'desc-updated-first' as 'asc' | 'desc' | 'desc-updated-first'
   )
   const [view, setView] = useState('list' as 'list' | 'chart' | 'map')
   const [lang, setLang] = useState('en' as 'en' | 'cn')
-  
+
   const [winWidh, setWinWidth] = useState(window.innerWidth)
   const [winHeight, setWinHeight] = useState(window.innerHeight)
 
@@ -43,17 +42,24 @@ const App = () => {
   const [chartFmt, setChartFmt] = useState('stack' as 'stack' | 'line')
   const [chartLabelDisplayed, setChartLabelDisplayed] = useState(true)
   const [chartLegendDisplayed, setChartLegendDisplayed] = useState(true)
-  const [chatLegendDisplayApplicable, setChartLegendDisplayApplicable] = useState(winWidh * winHeight >= legendDisplayThreshold)
+  const [isMapPitched, setIsMapPitched] = useState(false)
+  const [
+    chatLegendDisplayApplicable,
+    setChartLegendDisplayApplicable,
+  ] = useState(winWidh * winHeight >= legendDisplayThreshold)
 
-  
   const chartConfigs = genClustersChart(clusters, {
     today,
     count: 17,
     showTotal: true,
     log: chartScale === 'log',
     stack: chartFmt === 'stack',
-    sideLabelPosition: !chartLabelDisplayed ? 'off' : winWidh >= 768 ? 'right' : 'left',
-    displayLegend: chartLegendDisplayed && chatLegendDisplayApplicable
+    sideLabelPosition: !chartLabelDisplayed
+      ? 'off'
+      : winWidh >= 768
+      ? 'right'
+      : 'left',
+    displayLegend: chartLegendDisplayed && chatLegendDisplayApplicable,
   })
 
   const canvasIds = {
@@ -66,7 +72,8 @@ const App = () => {
     function handleResize() {
       setWinWidth(window.innerWidth)
       setWinHeight(window.innerHeight)
-      const isChartLegendApplicable = window.innerWidth * window.innerHeight >= legendDisplayThreshold
+      const isChartLegendApplicable =
+        window.innerWidth * window.innerHeight >= legendDisplayThreshold
       setChartLegendDisplayApplicable(isChartLegendApplicable)
     }
     window.addEventListener('resize', handleResize)
@@ -98,6 +105,7 @@ const App = () => {
           clusters={clusters}
           today={today}
           lang={lang}
+          pitch={isMapPitched}
         />
       </div>
     ),
@@ -146,17 +154,26 @@ const App = () => {
             </Radio.Group>
           )}
           {view === 'map' && (
-            <Radio.Group
-              size="small"
-              defaultValue={lang}
-              value={lang}
-              onChange={(e) => {
-                setLang(e.target.value)
-              }}
-            >
-              <Radio.Button value="en">EN</Radio.Button>
-              <Radio.Button value="cn">中</Radio.Button>
-            </Radio.Group>
+            <>
+              <Radio.Group
+                size="small"
+                defaultValue={lang}
+                value={lang}
+                style={{ marginRight: 8 }}
+                onChange={(e) => {
+                  setLang(e.target.value)
+                }}
+              >
+                <Radio.Button value="en">EN</Radio.Button>
+                <Radio.Button value="cn">中</Radio.Button>
+              </Radio.Group>
+              <Switch
+                checkedChildren="3D"
+                unCheckedChildren="3D"
+                defaultChecked={isMapPitched}
+                onChange={bool => {setIsMapPitched(bool)}}
+              />
+            </>
           )}
           {view === 'chart' && (
             <>
@@ -169,35 +186,45 @@ const App = () => {
                   setChartFmt(e.target.value)
                 }}
               >
-                <Radio.Button value="linear"><LineChartOutlined /></Radio.Button>
-                <Radio.Button value="stack"><AreaChartOutlined /></Radio.Button>
+                <Radio.Button value="linear">
+                  <LineChartOutlined />
+                </Radio.Button>
+                <Radio.Button value="stack">
+                  <AreaChartOutlined />
+                </Radio.Button>
               </Radio.Group>
               <Radio.Group
-              size="small"
-              defaultValue={chartScale}
-              style={{ marginRight: 8 }}
-              value={chartScale}
-              onChange={(e) => {
-                setChartScale(e.target.value)
-              }}
-            >
-              <Radio.Button value="linear"><FundOutlined /></Radio.Button>
-              <Radio.Button value="log">lg</Radio.Button>
-            </Radio.Group>
-            { chatLegendDisplayApplicable &&
+                size="small"
+                defaultValue={chartScale}
+                style={{ marginRight: 8 }}
+                value={chartScale}
+                onChange={(e) => {
+                  setChartScale(e.target.value)
+                }}
+              >
+                <Radio.Button value="linear">
+                  <FundOutlined />
+                </Radio.Button>
+                <Radio.Button value="log">lg</Radio.Button>
+              </Radio.Group>
+              {chatLegendDisplayApplicable && (
+                <Switch
+                  checkedChildren={<TableOutlined />}
+                  unCheckedChildren={<TableOutlined />}
+                  style={{ marginRight: 8 }}
+                  defaultChecked={chartLegendDisplayed}
+                  onChange={(bool) => {
+                    setChartLegendDisplayed(bool)
+                  }}
+                />
+              )}
               <Switch
-                checkedChildren={<TableOutlined />}
-                unCheckedChildren={<TableOutlined />}
-                style={{ marginRight: 8}}
-                defaultChecked={chartLegendDisplayed}
-                onChange={bool => {setChartLegendDisplayed(bool)}}
-              />
-            }
-            <Switch
                 checkedChildren={<InfoCircleOutlined />}
                 unCheckedChildren={<InfoCircleOutlined />}
                 defaultChecked={chartLabelDisplayed}
-                onChange={bool => {setChartLabelDisplayed(bool)}}
+                onChange={(bool) => {
+                  setChartLabelDisplayed(bool)
+                }}
               />
             </>
           )}
