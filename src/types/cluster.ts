@@ -5,6 +5,7 @@ export interface Cluster {
     name: string,
     cnName?: string,
     short?: string,
+    sort?: string,
     addresses?: string[],
     origin?: Array<string | number>,
     originType?: 'cluster' | 'import',

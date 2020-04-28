@@ -44,7 +44,7 @@ const App = () => {
 
   const legendDisplayThreshold = 1112 * 834 // iPad Pro 10.5
 
-  const today = '2020-04-27'
+  const today = '2020-04-28'
 
   const [chartScale, setChartScale] = useState(
     (localStorage.getItem('sgcovid.chart.scale') || 'linear') as
@@ -52,7 +52,7 @@ const App = () => {
       | 'log'
   )
   const [order, setOrder] = useState(
-    (localStorage.getItem('sgcovid.chart.order') || 'desc-updated-first') as 'asc' | 'desc' | 'desc-updated-first'
+    (localStorage.getItem('sgcovid.chart.order') || 'asc-updated-first') as 'asc' | 'desc' | 'asc-updated-first'
   )
   const [chartFmt, setChartFmt] = useState(
     (localStorage.getItem('sgcovid.chart.mode') || 'stack') as 'stack' | 'line'
@@ -203,7 +203,7 @@ const App = () => {
               <Radio.Button value="desc">
                 <DownCircleOutlined />
               </Radio.Button>
-              <Radio.Button value="desc-updated-first">
+              <Radio.Button value="asc-updated-first">
                 <WarningOutlined />
               </Radio.Button>
             </Radio.Group>

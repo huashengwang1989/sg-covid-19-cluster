@@ -113,6 +113,7 @@
       .linked-cluster {
         font-size: 0.9em;
         margin: 2px 0;
+        line-height: 1em;
         .cluster-name {
           color: #ff3377;
           font-size: 0.75em;
@@ -129,7 +130,8 @@
         }
       }
       .main-cluster-people-wrapper {
-        display: flex;
+        // display: flex;
+        display: none;
         .side-spacer {
           flex: 100 1 auto;
           min-width: 0;

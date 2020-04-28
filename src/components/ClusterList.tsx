@@ -11,7 +11,7 @@ interface Props {
   clusters: Cluster[]
   count: number
   today: string // YYYY-MM-DD
-  order: 'asc' | 'desc' | 'desc-updated-first'
+  order: 'asc' | 'desc' | 'asc-updated-first'
 }
 
 const ClusterList: React.RefForwardingComponent<HTMLDivElement, Props> = (
@@ -24,8 +24,6 @@ const ClusterList: React.RefForwardingComponent<HTMLDivElement, Props> = (
     acc[c.uid] = c
     return acc
   }, {} as Record<string, Cluster>)
-  const dormClusters = clusters.filter((c) => c.type.includes('dorm'))
-  // const dormPeople = Array.from(new Set(([] as number[]).concat(...dormClusters.map((d) => d.people))))
   return (
     <div
       id="clusters"
@@ -46,7 +44,6 @@ const ClusterList: React.RefForwardingComponent<HTMLDivElement, Props> = (
         <div className="title"></div>
         <div className="flex-spacer"></div>
         <div className="update-append">
-          客工宿舍: {dormClusters.length} 间{' '}
           <span className="update-note">*4/19后无感染者具体信息</span>
         </div>
       </div>
@@ -57,14 +54,14 @@ const ClusterList: React.RefForwardingComponent<HTMLDivElement, Props> = (
             people: cluster.people.sort((a, b) => a - b),
           }))
           .sort((a, b) => {
-            const asc = (a.people[0] || 0) - (b.people[0] || 0)
-            const desc = (b.people[0] || 0) - (a.people[0] || 0)
+            const asc = (a.sort || a.name).localeCompare(b.sort || b.name) || a.name.localeCompare(b.name)
+            const desc = (b.sort || b.name).localeCompare(a.sort || a.name) || b.name.localeCompare(a.name)
             switch (order) {
               case 'asc':
                 return asc
               case 'desc':
                 return desc
-              case 'desc-updated-first':
+              case 'asc-updated-first':
                 const updateA = a.updates?.[today] || 0
                 const updateB = b.updates?.[today] || 0
                 // Both have updated
@@ -73,7 +70,7 @@ const ClusterList: React.RefForwardingComponent<HTMLDivElement, Props> = (
                   const ttB = b.total ?? b.people.length
                   // both new: desc order by updated number first, then desc
                   if (updateA === ttA && updateB === ttB) {
-                    return updateB - updateA || desc
+                    return updateB - updateA || asc
                   }
                   // Or: new first
                   if (updateA === ttA) {
@@ -83,7 +80,7 @@ const ClusterList: React.RefForwardingComponent<HTMLDivElement, Props> = (
                     return 1
                   }
                   // Otherwise, by updated number order
-                  return updateB - updateA || desc
+                  return updateB - updateA || asc
                 }
                 if (updateA > 0) {
                   return -1
@@ -91,9 +88,9 @@ const ClusterList: React.RefForwardingComponent<HTMLDivElement, Props> = (
                 if (updateB > 0) {
                   return 1
                 }
-                return desc
+                return asc
               default:
-                return desc
+                return asc
             }
           })
           .map((cluster) => {
