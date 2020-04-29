@@ -135,8 +135,8 @@ function genMap(
   const clustersWithGeoInfo = clusters.filter(
     (cl) => (cl.geopoints?.length || 0) > 0
   )
-  const size = 0.005
-  const heightScale = (total: number) => total * 10
+  const size = 0.003
+  const heightScale = (total: number) => total * 15
 
   const geodataFeatures: GeodataFeature[][] = clustersWithGeoInfo.map(
     (cluster) => {
@@ -162,7 +162,7 @@ function genMap(
       const isWiRecent14Days = isWithinDays(updates, recent14Days)
 
       const todayUpdateNum = updates?.[today] || 0
-      const newColor = '#449944'
+      const newColor = '#77ee44'
       const recent: Recent = isWiRecent3Days
         ? 'recent'
         : isWiRecent7Days
@@ -230,7 +230,7 @@ function genMap(
         properties: {
           ...geoData.properties,
           height: heightScale(total),
-          color: Color(newColor).mix(Color(color), pitch ? .35 : .5).hex(),
+          color: Color(newColor).mix(Color(color), pitch ? .1 : .5).hex(),
         },
         geometry: {
           ...geoData.geometry,
@@ -273,7 +273,7 @@ function genMap(
       description: (lang === 'cn' ? '数据更新于 ' : 'Data Updated ') + today,
       opacity: 1,
       color: '#889211',
-      fontSize: 24,
+      fontSize: 16,
       haloWidth: 4,
     },
     geometry: {
