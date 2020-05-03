@@ -44,7 +44,7 @@ const App = () => {
 
   const legendDisplayThreshold = 1112 * 834 // iPad Pro 10.5
 
-  const today = '2020-05-01'
+  const today = '2020-05-02'
 
   const [chartScale, setChartScale] = useState(
     (localStorage.getItem('sgcovid.chart.scale') || 'linear') as
