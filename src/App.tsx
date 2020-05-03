@@ -44,7 +44,7 @@ const App = () => {
 
   const legendDisplayThreshold = 1112 * 834 // iPad Pro 10.5
 
-  const today = '2020-05-02'
+  const today = '2020-05-03'
 
   const [chartScale, setChartScale] = useState(
     (localStorage.getItem('sgcovid.chart.scale') || 'linear') as
@@ -105,7 +105,7 @@ const App = () => {
 
   const chartConfigs = genClustersChart(clusters, {
     today,
-    count: 17,
+    count: 25,
     showTotal: true,
     log: chartScale === 'log',
     stack: chartFmt === 'stack',
