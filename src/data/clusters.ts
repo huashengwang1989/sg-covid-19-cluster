@@ -7961,7 +7961,7 @@ const clusters: Cluster[] = [
     short: 'Clementi N2C3',
     cnName: '',
     sort: 'Clementi N2C3',
-    geopoints: [],
+    geopoints: [[1.323672, 103.762109]],
     people: [],
     total: 27,
     updates: {
