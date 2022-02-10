@@ -39,7 +39,7 @@
     "jshint": "^2.11.0",
     "maki": "^2.1.0",
     "mapbox-gl": "^1.9.1",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "react-chartjs-2": "^2.9.0"
   },
   "peerDependencies": {
